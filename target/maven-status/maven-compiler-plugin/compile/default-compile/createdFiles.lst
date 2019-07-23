@@ -1,0 +1,12 @@
+com/acme/edu/BoolCommand.class
+com/acme/edu/LoggerController.class
+com/acme/edu/Command.class
+com/acme/edu/CharCommand.class
+com/acme/edu/StringCommand.class
+com/acme/edu/ApplicationTest.class
+com/acme/edu/LogConsoleSaver.class
+com/acme/edu/IntCommand.class
+com/acme/edu/ObjCommand.class
+com/acme/edu/ByteCommand.class
+com/acme/edu/LogSaver.class
+com/acme/edu/Logger.class
