@@ -7,7 +7,8 @@ public class StringCommand extends Command{
 
     private int numberOfIdenticalStr;
 
-    public StringCommand(String message) {
+    public StringCommand(String message) throws NullMessageException{
+        if (message == null) throw new NullMessageException("Can't log Null String");
         this.message = message;
         this.numberOfIdenticalStr = 1;
         this.state = "String";

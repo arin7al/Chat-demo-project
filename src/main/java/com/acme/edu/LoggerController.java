@@ -12,11 +12,20 @@ public class LoggerController {
         this.saver = saver;
     }
 
-    public void close() {
+    public void flush() throws Exception{
+        if (prevCommand==null) {
+            throw new NothingToFlushException("Can't flush before logging");
+        }
         saver.save(prevCommand.toString());
+        prevCommand = null;
     }
 
-    public void log(Command command) {
+    public void close() throws Exception{
+        flush();
+        saver.close();
+    }
+
+    public void log(Command command) throws FileException{
         boolean shouldFlushNow = ((prevCommand != null) && ((command.isChanged(prevCommand) || command.shouldFlushNow(prevCommand))));
         if (shouldFlushNow) {
             saver.save(prevCommand.toString());

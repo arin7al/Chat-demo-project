@@ -6,7 +6,8 @@ package com.acme.edu.Command;
 public class ObjCommand extends Command {
     private Object message;
 
-    public ObjCommand(Object message) {
+    public ObjCommand(Object message) throws NullMessageException{
+        if (message == null) throw new NullMessageException("Can't log Null Object");
         this.message = message;
         this.state = "Obj";
     }
