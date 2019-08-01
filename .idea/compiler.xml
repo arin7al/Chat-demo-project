@@ -9,8 +9,5 @@
         <module name="javajunior" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="javajunior" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
