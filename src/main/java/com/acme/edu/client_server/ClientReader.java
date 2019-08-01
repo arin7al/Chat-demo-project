@@ -55,7 +55,7 @@ public class ClientReader {
             new readServerMessage(outReroute, in).start();
         } catch (Exception e) {
             try {
-                if (consoleReader != null)
+            /*    if (consoleReader != null)
                 consoleReader.close();
                 if (outReroute != null)
                     outReroute.close();
@@ -70,7 +70,7 @@ public class ClientReader {
                 if (in != null)
                     in.close();
                 if (server != null)
-                    server.close();
+                    server.close();*/
 
             } catch (Exception ee) {
                 ee.printStackTrace();

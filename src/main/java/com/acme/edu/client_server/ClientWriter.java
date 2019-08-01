@@ -36,8 +36,8 @@ public class ClientWriter {
             new readServerMessage(consoleWriter, in).start();
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                if (consoleWriter != null) {
+/*            try {
+ *//*               if (consoleWriter != null) {
                     consoleWriter.close();
                 }
                 if (out != null) {
@@ -48,11 +48,11 @@ public class ClientWriter {
                 }
                 if (server != null) {
                     server.close();
-                }
+                }*//*
             } catch (IOException e1) {
                 e1.printStackTrace();
-                System.out.println("ERROR CLOSING");
-            }
+                System.out.println("ERROR CLOSING");*/
+      /*      }*/
         }
     }
 }
