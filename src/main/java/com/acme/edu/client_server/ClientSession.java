@@ -70,6 +70,6 @@ public class ClientSession extends Thread {
     }
 
     public synchronized void updataHistoryessage(String newMessage){
-       historyMessage += newMessage;
+       historyMessage += newMessage + System.lineSeparator();
     }
 }

@@ -11,7 +11,7 @@ public class MultiThreadedServer {
 
         new Thread(() -> {
             HashSet<BufferedWriter> clientOutList = new HashSet<>();
-            String messageHistory = null;
+            String messageHistory = "";
             while (true) {
                 try {
                     final Socket client = serverSocket.accept();

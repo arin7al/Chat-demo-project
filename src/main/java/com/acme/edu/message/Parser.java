@@ -1,9 +1,6 @@
 package com.acme.edu.message;
 
-import com.acme.edu.commands.Command;
-import com.acme.edu.commands.CommandHist;
-import com.acme.edu.commands.CommandSend;
-import com.acme.edu.commands.CommandUnknown;
+import com.acme.edu.commands.*;
 
 public class Parser {
 
@@ -13,7 +10,13 @@ public class Parser {
             case "\\hist":
                 return new CommandHist(name);
             case "\\snd":
-                return new CommandSend(message, name);
+                String newMessage = "";
+                for(int i=1; i<strings.length; i++){
+                    newMessage += strings[i];
+                }
+                return new CommandSend(newMessage, name);
+            case "\\chid":
+                return new CommandLogging();
             default:
                 return new CommandUnknown();
         }

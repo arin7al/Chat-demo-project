@@ -27,6 +27,10 @@ public class CommandSend implements Command {
         return getDecorateMessage();
     }
 
+    public boolean isLoggedUser(){
+        return userID.isEmpty();
+    }
+
     static boolean canBeMessage(String message) {
         if (message.length() > 150) {
             return false;

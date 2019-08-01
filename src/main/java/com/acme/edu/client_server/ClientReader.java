@@ -11,6 +11,14 @@ public class ClientReader {
 
     public static void main(String[] args) {
         int innerPort;
+        Socket server = null;
+        ServerSocket reroute = null;
+        Socket rerouteClient = null;
+        BufferedReader in = null;
+        BufferedWriter out = null;
+        BufferedReader inReroute = null;
+        BufferedWriter outReroute = null;
+        BufferedReader consoleReader = null;
         try {
             innerPort = Integer.parseInt(args[0]);
         } catch (Exception e) {
@@ -18,31 +26,26 @@ public class ClientReader {
             return;
         }
         try {
-            final Socket server = new Socket("localhost", 666);
-            final ServerSocket reroute = new ServerSocket(innerPort);
-            final Socket rerouteClient = reroute.accept();
-            final BufferedReader in =
-                    new BufferedReader(
+            server = new Socket("localhost", 666);
+            reroute = new ServerSocket(innerPort);
+            rerouteClient = reroute.accept();
+            in = new BufferedReader(
                             new InputStreamReader(
                                     new BufferedInputStream(
                                             server.getInputStream())));
-            final BufferedWriter out =
-                    new BufferedWriter(
+            out = new BufferedWriter(
                             new OutputStreamWriter(
                                     new BufferedOutputStream(
                                             server.getOutputStream())));
-            final BufferedReader inReroute =
-                    new BufferedReader(
+            inReroute = new BufferedReader(
                             new InputStreamReader(
                                     new BufferedInputStream(
                                             rerouteClient.getInputStream())));
-            final BufferedWriter outReroute =
-                    new BufferedWriter(
+            outReroute = new BufferedWriter(
                             new OutputStreamWriter(
                                     new BufferedOutputStream(
                                             rerouteClient.getOutputStream())));
-            final BufferedReader consoleReader =
-                    new BufferedReader(
+            consoleReader = new BufferedReader(
                             new InputStreamReader(
                                     new BufferedInputStream(
                                             System.in)));
@@ -50,8 +53,29 @@ public class ClientReader {
 
             new readConsoleMessage(consoleReader, out).start();
             new readServerMessage(outReroute, in).start();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            try {
+                if (consoleReader != null)
+                consoleReader.close();
+                if (outReroute != null)
+                    outReroute.close();
+                if (inReroute != null)
+                    inReroute.close();
+                if (rerouteClient != null)
+                    rerouteClient.close();
+                if (reroute != null)
+                    reroute.close();
+                if (out != null)
+                    out.close();
+                if (in != null)
+                    in.close();
+                if (server != null)
+                    server.close();
+
+            } catch (Exception ee) {
+                ee.printStackTrace();
+                System.out.println();
+            }
         }
     }
 
