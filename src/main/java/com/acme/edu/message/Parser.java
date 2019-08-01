@@ -1,7 +1,7 @@
 package com.acme.edu.message;
 
-import com.acme.edu.command.Command;
-import com.acme.edu.command.CommandHist;
+import com.acme.edu.commands.Command;
+import com.acme.edu.commands.CommandHist;
 
 public class Parser {
 

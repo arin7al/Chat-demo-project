@@ -14,7 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         String inputLine;
 
         LoggerController serverLogger = null;
@@ -105,7 +105,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public static void decorate(BufferedWriter out, String message) throws IOException {
         out.write(">>> " + message + " accepted");
         out.newLine();

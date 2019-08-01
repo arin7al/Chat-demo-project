@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConcurrentServer {
-    public static void main(String[] args) throws IOException {
+/*    public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(666);
         try {
             LoggerController serverLogger = new LoggerController(new LogFileSaver(Thread.currentThread().getName()+".txt"));
@@ -29,5 +29,5 @@ public class ConcurrentServer {
         } catch (FileException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

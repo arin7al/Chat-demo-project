@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConcurrencyDemo {
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         final ExecutorService pool = Executors.newFixedThreadPool(40);
         final Counter counter = new Counter();
         for (int i = 0; i < 100_000; i++) {
@@ -14,7 +14,7 @@ public class ConcurrencyDemo {
         }
         pool.shutdown();
         System.out.println(counter.getCount());
-    }
+    }*/
 }
 
 class Counter {
