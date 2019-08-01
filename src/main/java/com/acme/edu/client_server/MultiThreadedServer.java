@@ -3,10 +3,7 @@ package com.acme.edu.client_server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 public class MultiThreadedServer {
     public static void main(String[] args) throws IOException {

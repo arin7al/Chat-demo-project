@@ -2,6 +2,8 @@ package com.acme.edu.message;
 
 import com.acme.edu.commands.Command;
 import com.acme.edu.commands.CommandHist;
+import com.acme.edu.commands.CommandSend;
+import com.acme.edu.commands.CommandUnknown;
 
 public class Parser {
 
@@ -11,9 +13,9 @@ public class Parser {
             case "\\hist":
                 return new CommandHist(name);
             case "\\send":
-                return CommandSend(message, name);
+                return new CommandSend(message, name);
             default:
-                return CommandUknown();
+                return new CommandUnknown();
         }
     }
 

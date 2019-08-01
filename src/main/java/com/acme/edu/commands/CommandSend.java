@@ -10,7 +10,7 @@ public class CommandSend implements Command {
     private String userID;
     private Date date;
 
-    CommandSend(String message, String userID) {
+    public CommandSend(String message, String userID) {
         this.message = message;
         this.userID = userID;
         this.date = new Date(System.currentTimeMillis());
