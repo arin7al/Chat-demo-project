@@ -1,15 +1,20 @@
 package com.acme.edu.client_server;
 
+import com.acme.edu.commands.Command;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
+import java.util.*;
 
 public class MultiThreadedServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(666);
 
-        HashSet<BufferedWriter> clientOutList = new HashSet<>();
+        HashSet<BufferedWriter> clientSet = new HashSet<>();
+        Collection<BufferedWriter> clientSyncSet = Collections.synchronizedSet(clientSet);   //get and put will be safe
+
+        Collection<Command> commands = Collections.synchronizedList(new LinkedList<>());
         String messageHistory = null;
         while (true) {
             try {
@@ -22,8 +27,8 @@ public class MultiThreadedServer {
                         new OutputStreamWriter(
                                 new BufferedOutputStream(
                                         client.getOutputStream())));
-                clientOutList.add(out);
-                new ClientSession(client, in, out, messageHistory, clientOutList).start();
+                clientSyncSet.add(out);
+                new ClientSession(client, in, out, messageHistory, clientSyncSet, commands).start();
                 // new getMessage(client, in, out).start();
 
             } catch (IOException e) {

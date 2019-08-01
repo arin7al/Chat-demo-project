@@ -26,7 +26,7 @@ public class readServerMessage extends Thread{
                 consoleWriter.newLine();
                 consoleWriter.flush();
             } catch (Exception e) {
-                e.printStackTrace();
+                break;
             }
         }
     }

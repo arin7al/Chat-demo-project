@@ -26,7 +26,8 @@ public class readConsoleMessage extends Thread{
                 out.newLine();
                 out.flush();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                break;
             }
         }
     }

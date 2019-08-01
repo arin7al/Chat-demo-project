@@ -1,9 +1,6 @@
 package com.acme.edu.message;
 
-import com.acme.edu.commands.Command;
-import com.acme.edu.commands.CommandHist;
-import com.acme.edu.commands.CommandSend;
-import com.acme.edu.commands.CommandUnknown;
+import com.acme.edu.commands.*;
 
 public class Parser {
 
@@ -14,6 +11,8 @@ public class Parser {
                 return new CommandHist(name);
             case "\\snd":
                 return new CommandSend(message, name);
+            case "\\chid":
+                return new CommandChid(message);
             default:
                 return new CommandUnknown();
         }
