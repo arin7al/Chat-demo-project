@@ -32,7 +32,7 @@ public class ClientSession extends Thread {
                 String inputLine = in.readLine();
                 Command command = Parser.parse(inputLine, "new_user");
                 if (command instanceof CommandSend) {
-                    updataHistoryessage(command.toString());
+                    updateHistoryMessage(command.toString());
                     sendEverybody(command.toString());
                 } else if (command instanceof CommandHist) {
                     sendHistory();
@@ -61,15 +61,15 @@ public class ClientSession extends Thread {
 
     public void send(BufferedWriter bw, String message) {
         try {
-            this.out.write(message);
-            this.out.newLine();
-            this.out.flush();
+            bw.write(message);
+            bw.newLine();
+            bw.flush();
         } catch (IOException e) {
             clientOutList.remove(out);
         }
     }
 
-    public synchronized void updataHistoryessage(String newMessage){
-       historyMessage += newMessage + System.lineSeparator();
+    public synchronized void updateHistoryMessage(String newMessage){
+       historyMessage += newMessage;
     }
 }

@@ -4,10 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * Created by Java_5 on 01.08.2019.
- */
-public class ClientReader {
+public class ClientReader1 {
 
     public static void main(String[] args) {
         int innerPort;
@@ -18,7 +15,7 @@ public class ClientReader {
             System.out.println("INCORRECT PORT");
             return;
         }*/
-        innerPort = 999;
+        innerPort = 998;
         try {
             final Socket server = new Socket("localhost", 666);
             final ServerSocket reroute = new ServerSocket(innerPort);
@@ -58,3 +55,4 @@ public class ClientReader {
     }
 
 }
+

@@ -3,10 +3,7 @@ package com.acme.edu.client_server;
 import java.io.*;
 import java.net.Socket;
 
-/**
- * Created by Java_5 on 01.08.2019.
- */
-public class ClientWriter {
+public class ClientWriter1 {
 
     public static void main(String[] args) {
         int innerPort;
@@ -16,7 +13,7 @@ public class ClientWriter {
             System.out.println("INCORRECT PORT");
             return;
         }*/
-        innerPort = 999;
+        innerPort = 998;
         try {
             final Socket server = new Socket("localhost", innerPort);
             final BufferedReader in =
