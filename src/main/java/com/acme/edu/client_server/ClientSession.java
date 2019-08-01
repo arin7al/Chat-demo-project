@@ -1,28 +1,30 @@
 package com.acme.edu.client_server;
 
 import java.io.*;
-import java.net.Socket;
+import java.util.Collection;
 import java.util.HashSet;
-import com.acme.edu.commands.Command;
+
+import com.acme.edu.commands.*;
 import com.acme.edu.message.Parser;
-import com.acme.edu.commands.CommandSend;
-import com.acme.edu.commands.CommandHist;
-import com.acme.edu.commands.CommandUnknown;
 
 public class ClientSession extends Thread {
-    private Socket client;
+    private String userName;
     private BufferedReader in;
     private BufferedWriter out;
-    private HashSet<BufferedWriter> clientOutList;
+    private Collection<BufferedWriter> bufferOuts;
     private String historyMessage;
 
-    public ClientSession(Socket client, BufferedReader in, BufferedWriter out,
-                         String historyMessage, HashSet<BufferedWriter> clientOutList) throws IOException {
-        this.client = client;
+    public ClientSession(BufferedReader in, BufferedWriter out,
+                         String historyMessage, Collection<BufferedWriter> bufferOuts) throws IOException {
+        this.userName = "";
         this.in = in;
         this.out = out;
-        this.clientOutList = clientOutList;
+        this.bufferOuts = bufferOuts;
         this.historyMessage = historyMessage;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ClientSession extends Thread {
         while (true) {
             try {
                 String inputLine = in.readLine();
-                Command command = Parser.parse(inputLine, "new_user");
+                Command command = Parser.parse(inputLine, userName);
                 if (command instanceof CommandSend) {
                     updateHistoryMessage(command.toString());
                     sendEverybody(command.toString());
@@ -38,6 +40,10 @@ public class ClientSession extends Thread {
                     sendHistory();
                 } else if (command instanceof CommandUnknown) {
                     sendUnknownCommand();
+                } else if (command instanceof CommandAnonymous) {
+                    sendUnregistered();
+                } else if (command instanceof CommandInit) {
+                    setUserName(command.toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -49,8 +55,12 @@ public class ClientSession extends Thread {
         send(this.out, "Command is incorrect. Repeat please!");
     }
 
+    private void sendUnregistered() {
+        send(this.out, "Please register to start chatting!");
+    }
+
     public void sendEverybody(String message) {
-        for (BufferedWriter bw : clientOutList) {
+        for (BufferedWriter bw : bufferOuts) {
             send(bw, message);
         }
     }
@@ -65,11 +75,11 @@ public class ClientSession extends Thread {
             bw.newLine();
             bw.flush();
         } catch (IOException e) {
-            clientOutList.remove(out);
+            bufferOuts.remove(out);
         }
     }
 
     public synchronized void updateHistoryMessage(String newMessage){
-       historyMessage += newMessage;
+       historyMessage += newMessage + System.lineSeparator();
     }
 }
