@@ -12,7 +12,7 @@ public class Parser {
         switch (strings[0]) {
             case "\\hist":
                 return new CommandHist(name);
-            case "\\send":
+            case "\\snd":
                 return new CommandSend(message, name);
             default:
                 return new CommandUnknown();
