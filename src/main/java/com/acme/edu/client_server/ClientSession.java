@@ -17,6 +17,8 @@ public class ClientSession extends Thread {
     private Collection<BufferedWriter> clientsOut;
     private Collection<Command> commands;
     private volatile String historyMessage;
+    boolean keepGoing = true;
+    String userName = "Anonymous";
 
     public ClientSession(Socket client, BufferedReader in, BufferedWriter out,
                          String historyMessage, Collection<BufferedWriter> clientOut, Collection<Command> commands) throws IOException {
@@ -31,11 +33,10 @@ public class ClientSession extends Thread {
     @Override
     public void run() {
         boolean nameNotIdentified = true;
-        boolean keepGoing = true;
-        String userName = null;
+        String inputLine = null;
         while (nameNotIdentified) {
             try {
-                String inputLine = in.readLine();
+                inputLine = in.readLine();
                 Command command = Parser.parse(inputLine, "new_user");
                 if (command instanceof CommandChid) {
                     nameNotIdentified = false;
@@ -44,14 +45,16 @@ public class ClientSession extends Thread {
                     sendPleaseLogIn();
                 }
             } catch (Exception e) {
-                //e.printStackTrace();
+                if (inputLine == null) {
+                    deleteCurrClient();
+                }
                 keepGoing = false;
                 break;
             }
         }
         while (keepGoing) {
             try {
-                String inputLine = in.readLine();
+                inputLine = in.readLine();
                 Command command = Parser.parse(inputLine, userName);
                 if (command instanceof CommandSend) {
                     //updateHistoryMessage(command.toString());
@@ -63,9 +66,24 @@ public class ClientSession extends Thread {
                     sendUnknownCommand();
                 }
             } catch (Exception e) {
-                //e.printStackTrace();
+                if (inputLine == null) {
+                    deleteCurrClient();
+                }
                 break;
             }
+        }
+    }
+
+    private synchronized void deleteCurrClient() {
+        clientsOut.remove(out);
+        keepGoing = false;
+        System.out.println(userName + " disconnected");
+        try {
+            in.close();
+            out.close();
+        }
+        catch (Exception e){
+            System.out.println("Cannot read message");
         }
     }
 

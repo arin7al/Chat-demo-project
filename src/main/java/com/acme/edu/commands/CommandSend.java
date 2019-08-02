@@ -17,9 +17,20 @@ public class CommandSend implements Command {
     }
 
     public String getDecorateMessage() {
+        String[] strings= message.split(" ");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm-dd 'at' HH:mm:ss z");
         String stringDate = simpleDateFormat.format(date);
-        return stringDate + " " + userID + ": " + message;
+        StringBuilder strb = new StringBuilder();
+        strb.append(stringDate);
+        strb.append(" ");
+        strb.append(userID);
+        strb.append(": ");
+        int n = strings.length;
+        for(int i = 1; i<n; i++) {
+            strb.append(strings[i]);
+        }
+        //return stringDate + " " + userID + ": " + message;
+        return strb.toString();
     }
 
     @Override

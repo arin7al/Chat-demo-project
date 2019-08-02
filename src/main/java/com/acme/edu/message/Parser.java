@@ -12,7 +12,7 @@ public class Parser {
             case "\\snd":
                 return new CommandSend(message, name);
             case "\\chid":
-                return new CommandChid(message);
+                return new CommandChid(strings[1]);
             default:
                 return new CommandUnknown();
         }
