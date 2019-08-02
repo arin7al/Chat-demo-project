@@ -1,72 +1,95 @@
 package com.acme.edu.client_server;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import com.acme.edu.commands.*;
 import com.acme.edu.message.Parser;
 
 public class ClientSession extends Thread {
-    private String userName;
+    private Socket client;
     private BufferedReader in;
     private BufferedWriter out;
-    private Collection<BufferedWriter> bufferOuts;
-    private String historyMessage;
+    private Collection<BufferedWriter> clientsOut;
+    private Collection<Command> commands;
+    private volatile String historyMessage;
 
-    public ClientSession(BufferedReader in, BufferedWriter out,
-                         String historyMessage, Collection<BufferedWriter> bufferOuts) throws IOException {
-        this.userName = "";
+    public ClientSession(Socket client, BufferedReader in, BufferedWriter out,
+                         String historyMessage, Collection<BufferedWriter> clientOut, Collection<Command> commands) throws IOException {
+        this.client = client;
         this.in = in;
         this.out = out;
-        this.bufferOuts = bufferOuts;
+        this.clientsOut = clientOut;
         this.historyMessage = historyMessage;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+        this.commands = commands;
     }
 
     @Override
     public void run() {
-        while (true) {
+        boolean nameNotIdentified = true;
+        boolean keepGoing = true;
+        String userName = null;
+        while (nameNotIdentified) {
+            try {
+                String inputLine = in.readLine();
+                Command command = Parser.parse(inputLine, "new_user");
+                if (command instanceof CommandChid) {
+                    nameNotIdentified = false;
+                    userName = ((CommandChid) command).getID();
+                } else {
+                    sendPleaseLogIn();
+                }
+            } catch (Exception e) {
+                //e.printStackTrace();
+                keepGoing = false;
+                break;
+            }
+        }
+        while (keepGoing) {
             try {
                 String inputLine = in.readLine();
                 Command command = Parser.parse(inputLine, userName);
                 if (command instanceof CommandSend) {
-                    updateHistoryMessage(command.toString());
+                    //updateHistoryMessage(command.toString());
+                    commands.add(command);
                     sendEverybody(command.toString());
                 } else if (command instanceof CommandHist) {
                     sendHistory();
                 } else if (command instanceof CommandUnknown) {
                     sendUnknownCommand();
-                } else if (command instanceof CommandAnonymous) {
-                    sendUnregistered();
-                } else if (command instanceof CommandInit) {
-                    setUserName(command.toString());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                break;
             }
         }
+    }
+
+    private void sendPleaseLogIn() {
+        send(this.out, "You didn't log in. Log in please!");
     }
 
     private void sendUnknownCommand() {
         send(this.out, "Command is incorrect. Repeat please!");
     }
 
-    private void sendUnregistered() {
-        send(this.out, "Please register to start chatting!");
-    }
-
     public void sendEverybody(String message) {
-        for (BufferedWriter bw : bufferOuts) {
+        for (BufferedWriter bw : clientsOut) {
             send(bw, message);
         }
     }
 
     public void sendHistory() {
-        send(this.out, this.historyMessage);
+        send(this.out, "-----history begins-----");
+        for (Command cmd: commands) {
+            send(this.out, cmd.toString());
+        }
+        //send(this.out, this.historyMessage);
+        send(this.out, "-----history ends-----");
     }
 
     public void send(BufferedWriter bw, String message) {
@@ -75,11 +98,11 @@ public class ClientSession extends Thread {
             bw.newLine();
             bw.flush();
         } catch (IOException e) {
-            bufferOuts.remove(out);
+            clientsOut.remove(out);
         }
     }
 
     public synchronized void updateHistoryMessage(String newMessage){
-       historyMessage += newMessage + System.lineSeparator();
+       historyMessage += newMessage;
     }
 }
