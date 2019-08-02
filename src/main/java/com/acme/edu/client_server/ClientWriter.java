@@ -14,9 +14,13 @@ public class ClientWriter {
         BufferedReader in = null;
         BufferedWriter out = null;
         BufferedWriter consoleWriter = null;
-
         try {
-            innerPort = 668;
+            innerPort = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            System.out.println("INCORRECT PORT");
+            return;
+        }
+        try {
             server = new Socket("localhost", innerPort);
             in = new BufferedReader(
                             new InputStreamReader(
@@ -29,7 +33,7 @@ public class ClientWriter {
             consoleWriter = new BufferedWriter(
                                 new OutputStreamWriter(
                                     new BufferedOutputStream(System.out)));
-            new readServerMessage(consoleWriter, in).start();
+            new ReadServerMessage(consoleWriter, in).start();
         } catch (IOException e) {
             e.printStackTrace();
 /*            try {

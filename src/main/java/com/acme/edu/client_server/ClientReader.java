@@ -20,7 +20,12 @@ public class ClientReader {
         BufferedWriter outReroute = null;
         BufferedReader consoleReader = null;
         try {
-            innerPort = 668;
+            innerPort = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            System.out.println("INCORRECT PORT");
+            return;
+        }
+        try {
             server = new Socket("localhost", 666);
             reroute = new ServerSocket(innerPort);
             rerouteClient = reroute.accept();
@@ -46,8 +51,8 @@ public class ClientReader {
                                             System.in)));
 
 
-            new readConsoleMessage(consoleReader, out).start();
-            new readServerMessage(outReroute, in).start();
+            new ReadConsoleMessage(consoleReader, out).start();
+            new ReadServerMessage(outReroute, in).start();
         } catch (Exception e) {
             try {
             /*    if (consoleReader != null)

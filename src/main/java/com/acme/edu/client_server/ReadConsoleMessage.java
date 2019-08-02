@@ -7,11 +7,11 @@ import java.io.IOException;
 /**
  * Created by Java_5 on 01.08.2019.
  */
-public class readConsoleMessage extends Thread{
+public class ReadConsoleMessage extends Thread{
     BufferedReader consoleReader;
     BufferedWriter out;
     String inputLine;
-    readConsoleMessage(BufferedReader consoleReader,BufferedWriter out) throws IOException {
+    ReadConsoleMessage(BufferedReader consoleReader, BufferedWriter out) throws IOException {
         this.consoleReader = consoleReader;
         this.out = out;
     }
